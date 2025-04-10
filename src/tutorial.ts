@@ -82,3 +82,56 @@ if (isNameInList("Someone")) {
 } else {
   console.log(`Not is the list.`);
 }
+
+// Optional Parameters
+function calculatePrice(price: number, discount?: number) {
+  return price - (discount || 0);
+}
+
+console.log(calculatePrice(500, 20));
+console.log(calculatePrice(500));
+
+// Default Parameters
+function calculateScore(initialScore: number, penaltyPoints: number = 0) {
+  return initialScore - penaltyPoints;
+}
+
+const scoreAfterPenalty = calculateScore(100, 20);
+console.log(scoreAfterPenalty); // Output: 80
+
+const scoreWithoutPenalty = calculateScore(300);
+console.log(scoreWithoutPenalty); // Output: 300
+
+// working with the reset operator(rest parameter)
+
+function sum(message: string, ...numbers: number[]): string {
+  const doubled = numbers.map((num) => num * 2);
+  console.log(doubled);
+
+  let total = doubled.reduce((previous, current) => {
+    return previous + current;
+  });
+  return `${message}${total}`;
+}
+
+const sumResult = sum("The total is: ", 1, 2, 3, 4, 5, 8);
+console.log(sumResult);
+
+// void return types
+function logMessage(message: string): void {
+  console.log(message);
+}
+
+logMessage("Hello, TypeScript!");
+
+// Little challenge = function with a union return
+function processInput(input: string | number) {
+  if (typeof input === "number") {
+    console.log(input * 2);
+  } else {
+    console.log(input.toUpperCase());
+  }
+}
+
+processInput(10); // Output: 20
+processInput("Hello"); // Output: HELLO
