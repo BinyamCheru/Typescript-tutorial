@@ -1,50 +1,38 @@
-const age: number = 25;
-console.log(age);
+const price: number[] = [21, 43, 546];
+console.log(price);
 
-const name = "Someone";
-console.log(name);
+// be careful "[]" means literally empty array
+// let emptyArr[] = []
 
-// Little challenge
-let greeting: string = "Hello, Typescript";
-greeting = greeting.toUpperCase();
+const mixedArray: (string | boolean)[] = ["something", true, "anything", false];
+console.log(mixedArray);
 
-console.log(greeting);
+// objects
 
-let isAdult: boolean = age >= 18;
-isAdult = !isAdult;
+const car: { brand: string; year: number } = { brand: "toyota", year: 2021 };
 
-console.log(isAdult);
+console.log(car);
 
-// Union type
-let tax: number | string = 10;
-tax = 10;
-tax = "this is string";
+const book = { title: "book", cost: 20 };
+const pen = { title: "pen", cost: 5 };
+const notebook = { title: "notebook" };
 
-console.log(tax);
+// const items: { title: string; cost?: number }[] = [book, pen, notebook];
+const items: { readonly title: string; cost?: number }[] = [
+  book,
+  pen,
+  notebook,
+];
 
-// literal value type
-let requestStatus: "pending" | "success" | "error";
-requestStatus = "error";
-requestStatus = "success";
-// requestStatus = "random";
-console.log(requestStatus);
+// items[0].title = "new book"; this error b/c the obj is readonly
 
-// the type any
-let anyType;
-anyType = 10;
-anyType = "This is a string";
-console.log(anyType);
+console.log(items);
 
-const books = ["1984", "Brave New World", "Fahrenheit 451"];
+// Little challenge on obj
+const product1 = { title: "Shirt", price: 20 };
+const product2 = { title: "Pants" };
 
-let foundBook: string | undefined;
+const products: { title: string; price?: number }[] = [product1, product2];
 
-for (const book of books) {
-  if (book === "1983") {
-    foundBook = book;
-    foundBook = foundBook.toUpperCase();
-    break;
-  }
-}
-
-console.log(foundBook?.length);
+products.push({ title: "shoes" });
+console.log(products);
