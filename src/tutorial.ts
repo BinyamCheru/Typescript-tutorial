@@ -1,187 +1,109 @@
-// // Interface
-// interface Book {
-//   isbn: number;
-//   title: string;
-//   author: string;
-//   genre?: string;
-//   // methods
-//   printAuthor(): void;
-//   printTitle(message: string): string;
-//   // arrow functions
-//   printSomething: (someValue: number) => number;
-// }
+// Tuples
+const person: [string, number] = ["john", 25];
+console.log(person[0]); // Outputs: john
+console.log(person[1]); // Outputs: 25
 
-// const deepWork: Book = {
-//   isbn: 12345654,
-//   title: "Deep Work",
-//   author: "Cal Newport",
-//   genre: "Self-help",
-//   // methods
-//   printAuthor() {
-//     console.log(`${this.author}`);
-//   },
-//   printTitle(message) {
-//     return `${this.title} ${message}`;
-//   },
-//   // first option
-//   // printSomething: function (someValue) {
-//   //   return someValue;
-//   // },
-//   // second option
-//   printSomething: (someValue) => {
-//     // console.log(this.author); ERROR: this gotcha
-//     console.log(deepWork.author);
-//     return someValue;
-//   },
-//   // third option
-//   // printSomething(someValue) {
-//   //   return someValue;
-//   // },
-// };
+// optional parameter
+const john: [string, number?] = ["john"];
 
-// deepWork.printAuthor();
-// const result = deepWork.printTitle("is awesome book.");
-// console.log(result);
-
-// console.log(deepWork.printSomething(785));
-
-// // Challenge
-// interface Computer {
-//   readonly id: number;
-//   brand: string;
-//   ram: number;
-//   storage?: number;
-//   upgradeRam(increase: number): number;
-// }
-
-// const laptop: Computer = {
-//   id: 1,
-//   brand: "radom brand",
-//   ram: 8,
-//   upgradeRam(amount: number) {
-//     this.ram += amount;
-//     return this.ram;
-//   },
-// };
-
-// laptop.storage = 256;
-// console.log(laptop.upgradeRam(4));
-// console.log(laptop);
-
-//  Interface - Merging, Extend, TypeGuard
-
-// interface Person {
-//   name: string;
-//   getDetails(): string;
-// }
-
-// interface DogOwner {
-//   dogName: string;
-//   getDogDetails(): string;
-// }
-
-// // Merging the interface
-// interface Person {
-//   age: number;
-// }
-
-// const person: Person = {
-//   name: "John",
-//   age: 30,
-//   getDetails() {
-//     return `Name: ${this.name}, Age: ${this.age}`;
-//   },
-// };
-
-// console.log(person.getDetails());
-
-// // Extending an interface it is the same concept as inheritance
-// interface Employee extends Person {
-//   employeeId: number;
-// }
-
-// const employee: Employee = {
-//   name: "Jane",
-//   age: 28,
-//   employeeId: 123,
-//   getDetails() {
-//     return `Name: ${this.name}, Age: ${this.age}, Employee ID: ${this.employeeId}`;
-//   },
-// };
-
-// console.log(employee.getDetails());
-
-// // Interface with multiple inheritance
-// interface Manager extends Person, DogOwner {
-//   managePeople(): void;
-// }
-
-// const manager: Manager = {
-//   name: "Bob",
-//   age: 41,
-//   dogName: "Rex",
-//   getDetails() {
-//     return `Name: ${this.name}, Age: ${this.age}`;
-//   },
-//   getDogDetails() {
-//     return `Dog Name: ${this.dogName}`;
-//   },
-//   managePeople() {
-//     console.log("Managing people...");
-//   },
-// };
-
-// console.log(manager.getDetails());
-// console.log(manager.getDogDetails());
-// manager.managePeople();
-
-// Challenge
-interface Person {
-  name: string;
+function getPerson(): [string, number] {
+  return ["john", 25];
 }
 
-interface DogOwner extends Person {
-  dogName: string;
+const randomPerson = getPerson();
+console.log(randomPerson[0]); // Outputs: john
+console.log(randomPerson[1]);
+
+const date: readonly [number, number, number] = [14, 5, 2017];
+// if the array was not a readonly you can push to the array
+// date.push(900)
+// date.push(900)
+// date.push(900)
+console.log(date);
+
+// Enums
+// enum ServerResponseStatus {
+//   Success,
+//   Error,
+// }
+
+// interface ServerResponse {
+//   result: ServerResponseStatus;
+//   data: string[];
+// }
+
+// function getServerResponse(): ServerResponse {
+//   return {
+//     result: ServerResponseStatus.Success,
+//     data: ["first item", "second item"],
+//   };
+// }
+
+// const response: ServerResponse = getServerResponse();
+// console.log(response);
+
+// Reverse mapping is a feature of numeric enums that can be useful but also surprising
+// Reverse mapping doesn't work on String Values
+// enum ServerResponseStatus {
+//   Success = "Success",
+//   Error = "Error",
+// }
+
+// Object.values(ServerResponseStatus).forEach((value) => console.log(value));
+
+// Reverse mapping on Numeric Values
+enum ServerResponseStatus {
+  Success = 200,
+  Error = 500,
 }
 
-interface Manager extends Person {
-  managePeople(): void;
-  delegateTasks(): void;
-}
-
-function getEmployee(): Person | DogOwner | Manager {
-  const random = Math.random();
-  if (random < 0.33) {
-    return {
-      name: "john",
-    };
-  } else if (random < 0.66) {
-    return {
-      name: "sarah",
-      dogName: "Rex",
-    };
-  } else {
-    return {
-      name: "bob",
-      managePeople: () => console.log("Managing people..."),
-      delegateTasks: () => console.log("Delegating tasks..."),
-    };
+Object.values(ServerResponseStatus).forEach((value) => {
+  if (typeof value === "number") {
+    console.log(value);
   }
-}
+});
 
-const employee: Person | DogOwner | Manager = getEmployee();
-console.log(employee);
+// key difference between numeric enums and string enums in TypeScript regarding type safety and value assignment.
 
-// function isManager(obj: Person | DogOwner | Manager): boolean {
-//   return 'managePeople' in obj;
+// enum NumericEnum {
+//   Member = 1,
 // }
 
-// type predicate in TypeScript
+// enum StringEnum {
+//   Member = 'Value',
+// }
 
-function isManager(obj: Person | DogOwner | Manager): obj is Manager {
-  return "managePeople" in obj;
+// let numericEnumValue: NumericEnum = 1; // This is allowed
+// console.log(numericEnumValue); // 1
+
+// let stringEnumValue: StringEnum = 'Value'; // This is not allowed
+
+// CHALLENGE
+enum UserRole {
+  Admin,
+  Manager,
+  Employee,
 }
 
-if (isManager(employee)) {
-  employee.delegateTasks();
+// Define a type alias named User
+type User = {
+  id: number;
+  name: string;
+  role: UserRole;
+  contact: [string, string]; // Tuple: [email, phone]
+};
+
+// Define a function named createUser
+function createUser(user: User): User {
+  return user;
 }
+
+// Call the createUser function
+const user: User = createUser({
+  id: 1,
+  name: "John Doe",
+  role: UserRole.Admin,
+  contact: ["john.doe@example.com", "123-456-7890"],
+});
+
+console.log(user);
