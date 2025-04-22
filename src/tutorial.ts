@@ -1,109 +1,116 @@
-// Tuples
-const person: [string, number] = ["john", 25];
-console.log(person[0]); // Outputs: john
-console.log(person[1]); // Outputs: 25
+// Type assertion is a way to tell the TypeScript compiler "trust me, I know what I'm doing"
 
-// optional parameter
-const john: [string, number?] = ["john"];
+const someValue: any = "This is a string";
 
-function getPerson(): [string, number] {
-  return ["john", 25];
+const strLength = (someValue as string).length;
+console.log(strLength);
+
+type Bird = { name: string };
+
+// Assume we have a JSON string from an API or local file
+const birdString = '{"name": "Eagle"}';
+const dogString = '{"breed": "Poodle"}';
+
+// Parse the JSON string into an object
+const birdObject = JSON.parse(birdString);
+const dogObject = JSON.parse(dogString);
+
+// We're sure that the jsonObject is actually a Bird
+const bird = birdObject as Bird;
+const dog = dogObject as Bird;
+
+console.log(bird.name);
+console.log(dog.name);
+
+enum Status {
+  Pending = "pending",
+  Declined = "declined",
 }
 
-const randomPerson = getPerson();
-console.log(randomPerson[0]); // Outputs: john
-console.log(randomPerson[1]);
-
-const date: readonly [number, number, number] = [14, 5, 2017];
-// if the array was not a readonly you can push to the array
-// date.push(900)
-// date.push(900)
-// date.push(900)
-console.log(date);
-
-// Enums
-// enum ServerResponseStatus {
-//   Success,
-//   Error,
-// }
-
-// interface ServerResponse {
-//   result: ServerResponseStatus;
-//   data: string[];
-// }
-
-// function getServerResponse(): ServerResponse {
-//   return {
-//     result: ServerResponseStatus.Success,
-//     data: ["first item", "second item"],
-//   };
-// }
-
-// const response: ServerResponse = getServerResponse();
-// console.log(response);
-
-// Reverse mapping is a feature of numeric enums that can be useful but also surprising
-// Reverse mapping doesn't work on String Values
-// enum ServerResponseStatus {
-//   Success = "Success",
-//   Error = "Error",
-// }
-
-// Object.values(ServerResponseStatus).forEach((value) => console.log(value));
-
-// Reverse mapping on Numeric Values
-enum ServerResponseStatus {
-  Success = 200,
-  Error = 500,
-}
-
-Object.values(ServerResponseStatus).forEach((value) => {
-  if (typeof value === "number") {
-    console.log(value);
-  }
-});
-
-// key difference between numeric enums and string enums in TypeScript regarding type safety and value assignment.
-
-// enum NumericEnum {
-//   Member = 1,
-// }
-
-// enum StringEnum {
-//   Member = 'Value',
-// }
-
-// let numericEnumValue: NumericEnum = 1; // This is allowed
-// console.log(numericEnumValue); // 1
-
-// let stringEnumValue: StringEnum = 'Value'; // This is not allowed
-
-// CHALLENGE
-enum UserRole {
-  Admin,
-  Manager,
-  Employee,
-}
-
-// Define a type alias named User
 type User = {
-  id: number;
   name: string;
-  role: UserRole;
-  contact: [string, string]; // Tuple: [email, phone]
+  status: Status;
 };
 
-// Define a function named createUser
-function createUser(user: User): User {
-  return user;
+// save Status.Pending in the DB as a string
+// retrieve string from the DB
+const statusValue = "pending";
+const user: User = { name: "john", status: statusValue as Status };
+
+// Type - 'unknown'
+
+let unknownValue: unknown;
+
+// Assign different types of values to unknownValue
+unknownValue = "Hello World"; // OK
+unknownValue = [1, 2, 3]; // OK
+unknownValue = 42.3344556; // OK
+
+// unknownValue.toFixed( ); // Error: Object is of type 'unknown'
+
+if (typeof unknownValue === "number") {
+  console.log(unknownValue.toFixed(2));
 }
 
-// Call the createUser function
-const user: User = createUser({
-  id: 1,
-  name: "John Doe",
-  role: UserRole.Admin,
-  contact: ["john.doe@example.com", "123-456-7890"],
-});
+// we use the type unknown in try catch
+function runSomeCode() {
+  const random = Math.random();
+  if (random < 0.5) {
+    throw new Error("Something went wrong");
+  } else {
+    throw "some error";
+  }
+}
 
-console.log(user);
+try {
+  runSomeCode();
+} catch (error) {
+  if (error instanceof Error) {
+    console.log(error.message);
+  }
+  console.log(error);
+}
+
+// Type - "never"
+// let someValue: never = 0; you can't assign any value to a variable of type never.
+
+type Theme = "light" | "dark";
+
+function checkTheme(theme: Theme) {
+  if (theme === "light") {
+    console.log("light theme");
+    return;
+  }
+  if (theme === "dark") {
+    console.log("dark theme");
+    return;
+  }
+  theme;
+  // theme is of type never, because it can never have a value that is not 'light' or 'dark'.
+}
+
+enum Color {
+  Red,
+  Blue,
+  Green,
+}
+
+function getColorName(color: Color) {
+  switch (color) {
+    case Color.Red:
+      return "Red";
+    case Color.Blue:
+      return "Blue";
+    case Color.Green:
+      return "Green";
+    default:
+      // at build time
+      const unexpectedColor: never = color;
+      // at runtime
+      throw new Error(`Unexpected color value: ${unexpectedColor}`);
+  }
+}
+
+console.log(getColorName(Color.Red)); // Red
+console.log(getColorName(Color.Blue)); // Blue
+console.log(getColorName(Color.Green)); // Green
