@@ -48,10 +48,33 @@ function printLength(str: string | null | undefined) {
     // because `null` and `undefined` are falsy values.
     console.log(str.length);
   } else {
-    console.log('No string provided');
+    console.log("No string provided");
   }
 }
 
-printLength('Hello'); // Outputs: 5
+printLength("Hello"); // Outputs: 5
 printLength(null); // Outputs: No string provided
 printLength(undefined); // Outputs: No string provided
+
+// METHOD IV
+try {
+  // throw "String error";
+  throw new Error("This is an error.");
+} catch (error) {
+  if (error instanceof Error) {
+    console.log("Caught an Error object: " + error.message);
+  }
+  console.log(error);
+}
+
+function checkInput(input: Date | string): string {
+  if (input instanceof Date) {
+    return input.getFullYear().toString();
+  }
+  return input;
+}
+
+const year = checkInput(new Date());
+const strDate = checkInput("2020-05-05");
+console.log(year);
+console.log(strDate);
