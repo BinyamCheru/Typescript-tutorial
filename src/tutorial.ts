@@ -1,15 +1,20 @@
-import newStudent, { person, sayHello, Student } from "./actions";
-import { helloJs } from "./example";
+// Type Guarding
+type ValueType = string | number | boolean;
 
-sayHello("Typescript");
-console.log(person);
-console.log(newStudent);
+let value: ValueType;
+const random = Math.random();
+value = random < 0.33 ? "Hello" : random < 0.66 ? 123.456 : true;
 
-const anotherStudent: Student = {
-  name: "bob",
-  age: 23,
-};
+function checkValue(value: ValueType) {
+  if (typeof value === "string") {
+    console.log(value.toUpperCase());
+    return;
+  }
+  if (typeof value === "number") {
+    console.log(value.toFixed(2));
+    return;
+  }
+  console.log(`boolean: ${value}`);
+}
 
-console.log(anotherStudent);
-
-helloJs();
+checkValue(value);
